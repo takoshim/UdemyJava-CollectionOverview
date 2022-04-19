@@ -1,10 +1,9 @@
 import javax.print.attribute.HashPrintServiceAttributeSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Theater {
     private final String theaterName;
-    private List<Seat> seats = new ArrayList<>();
+    private Collection<Seat> seats = new ArrayList<>();
 
     public Theater(String theaterName, int numRows, int seatsPerRow) {
         this.theaterName = theaterName;
@@ -15,7 +14,6 @@ public class Theater {
                 Seat seat = new Seat(row + String.format("%02d", seatNum));
                 seats.add(seat);
             }
-
         }
     }
 
@@ -26,6 +24,7 @@ public class Theater {
     public boolean reserveSeat(String seatNumber) {
         Seat requestedSeat = null;
         for (Seat seat : seats) {
+            System.out.print(".");
             if(seat.getSeatNumber().equals(seatNumber)) {
                 requestedSeat = seat;
                 break;
@@ -45,12 +44,17 @@ public class Theater {
         }
     }
 
-    private class Seat {
+    private class Seat implements Comparable<Seat> {
         private final String seatNumber;
         private boolean reserved = false;
 
         public Seat(String seatNumber) {
             this.seatNumber = seatNumber;
+        }
+
+        @Override
+        public int compareTo(Seat seat) {
+            return this.seatNumber.compareToIgnoreCase(seat.getSeatNumber());
         }
 
         public boolean reserve() {
